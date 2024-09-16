@@ -1,0 +1,121 @@
+import java.util.Scanner;
+
+public class jogoVelha {
+    public static void imprimiJogoVelha(char[][] jogoVelha){
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                System.out.print(jogoVelha[i][j] + "\t");
+            }
+            System.out.println("");
+        }
+
+    }
+    public static void ordenaJogoInicial(char[][] jogoInicial){
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                jogoInicial[i][j]= '#';
+            }
+        }
+    }
+    public static boolean jogoEmpatou(char[][] jogoInicial){
+        int contador =0;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(jogoInicial[i][j]=='O' || jogoInicial[i][j]=='X'){
+                    contador++;
+                }
+            }
+        }
+        return contador==9;
+    }
+    public static boolean verificarGanhador(char[][] jogoInicial){
+        int contadorUmColuna =0;
+        int contadorDoisColuna =0;
+        int contadorUmLinha =0;
+        int contadorDoisLinha =0;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(jogoInicial[i][j]=='X'){
+                    contadorUmColuna++;
+                }
+                if(jogoInicial[i][j]=='O'){
+                    contadorDoisColuna++;
+                }           
+                if(jogoInicial[j][i]=='X'){
+                    contadorUmLinha++;
+                }
+                if(jogoInicial[j][i]=='O'){
+                    contadorDoisLinha++;
+                }
+                
+                if(contadorUmColuna==3 || contadorDoisColuna==3 || contadorUmLinha==3 || contadorDoisLinha==3){
+                    return true;
+                }                
+            }
+            contadorUmColuna =0;
+            contadorDoisColuna =0;
+            contadorUmLinha =0;
+            contadorDoisLinha =0;
+        }
+        if(jogoInicial[1][1]=='O' || jogoInicial[1][1]=='X'){
+            if(jogoInicial[0][0]==jogoInicial[2][2] && jogoInicial[0][0]==jogoInicial[1][1]){
+                return true;            
+            }
+            if(jogoInicial[2][0]==jogoInicial[0][2] && jogoInicial[0][2]==jogoInicial[1][1]){
+                return true;            
+            }                 
+       }
+        return false;
+    }
+    public static void main(String[] args) {
+
+        char[][] jogoVelha = new char[3][3];
+        Scanner sc1 = new Scanner(System.in);
+        int playerLinha, playerColuna, i;
+        char valor ='#';
+        ordenaJogoInicial(jogoVelha);
+        while (true) { 
+            for(i=1;i<3;i++){
+                imprimiJogoVelha(jogoVelha);
+                do { 
+                    System.out.printf("\nA vez do jogador %d Sair[0] ", i);                           
+                    System.out.println("Escolha a linha de 1 a 3 para sua jogada");
+                    playerLinha = sc1.nextInt();
+                    if(playerLinha==0){
+                        return;
+                    }     
+                    System.out.println("Escolha a coluna de 1 a 3 para sua jogada");
+                    playerColuna = sc1.nextInt();
+                    if(playerColuna==0){
+                        return;
+                    }  
+                    if(jogoVelha[--playerLinha][--playerColuna]!= '#'){
+                        System.out.println("Posição Inválida");  
+                    }
+                
+                } while (jogoVelha[playerLinha][playerColuna]!= '#');               
+                if(i==1){
+                    valor = 'X';
+                }else if (i==2) {
+                    valor = 'O';
+                }
+                if(playerLinha>=0 && playerColuna>=0 && playerLinha<=3 && playerColuna<=3){
+                    jogoVelha[playerLinha][playerColuna]= valor;
+                }  
+                if (verificarGanhador(jogoVelha)) {
+                    System.out.printf("Ganhou jogador %d\n", i);
+                    imprimiJogoVelha(jogoVelha);
+                    return;
+                }
+                if (jogoEmpatou(jogoVelha)) {
+                    System.out.println("Deu Velha!");
+                    imprimiJogoVelha(jogoVelha);
+                    return;
+                }
+                
+            }                
+                 
+        }        
+
+    }
+}
